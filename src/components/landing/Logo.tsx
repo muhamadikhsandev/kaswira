@@ -17,7 +17,7 @@ export default function Logo({ className = '' }: LogoProps) {
         />
       </div>
       <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-white italic leading-none -ml-1 md:-ml-2">
-        Kaswira<span className="text-[#FF6600]">Pos</span>
+        Kas<span className="text-[#FF6600]">wira</span>
       </span>
     </div>
   )
