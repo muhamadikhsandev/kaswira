@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { ArrowRight, BarChart3, Settings, Users, Box, Wallet, Search, Plus, TrendingUp, DollarSign, ShoppingBag, Layers, Wifi, Battery } from 'lucide-react'
 
 export default function Hero() {
@@ -45,10 +46,10 @@ export default function Hero() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <button className="group w-full sm:w-auto px-8 py-3.5 bg-[#FF6600] text-white rounded-xl font-black transition-all hover:scale-[1.03] active:scale-95 shadow-[0_15px_30px_-10px_rgba(255,102,0,0.35)] flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
+              <Link href="/register" className="group w-full sm:w-auto px-8 py-3.5 bg-[#FF6600] text-white rounded-xl font-black transition-all hover:scale-[1.03] active:scale-95 shadow-[0_15px_30px_-10px_rgba(255,102,0,0.35)] flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
                 MULAI SEKARANG
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
               
               <button className="w-full sm:w-auto px-7 py-3.5 bg-white/5 text-white rounded-xl font-bold border border-white/10 hover:bg-white/10 transition-all text-xs backdrop-blur-sm">
                 Pelajari Fitur

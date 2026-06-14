@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import Logo from './Logo'
 import { 
   Menu, 
@@ -85,14 +86,13 @@ export default function Navbar() {
             {/* 3. ACTION BUTTONS - Proportional sizing */}
             <div className="flex items-center gap-3 z-10">
               <div className="hidden md:flex items-center gap-2">
-                <a href="#features" className="flex items-center gap-2 text-white hover:bg-white/10 px-5 py-3 rounded-xl text-xs md:text-sm font-bold transition-all group tracking-wide">
-                  <Compass size={16} className="text-slate-400 group-hover:text-[#FF6600] transition-colors" />
-                  PELAJARI FITUR
-                </a>
-                <a href="#register" className="flex items-center gap-2 bg-[#FF6600] hover:bg-[#ff7a20] text-white px-6 py-3 rounded-xl text-xs md:text-sm font-black transition-all active:scale-95 shadow-[0_6px_15px_-4px_rgba(255,102,0,0.4)] tracking-wide">
+                <Link href="/login" className="flex items-center gap-2 text-white hover:bg-white/10 px-5 py-3 rounded-xl text-xs md:text-sm font-bold transition-all group tracking-wide">
+                  MASUK
+                </Link>
+                <Link href="/register" className="flex items-center gap-2 bg-[#FF6600] hover:bg-[#ff7a20] text-white px-6 py-3 rounded-xl text-xs md:text-sm font-black transition-all active:scale-95 shadow-[0_6px_15px_-4px_rgba(255,102,0,0.4)] tracking-wide">
                   <Rocket size={16} />
                   MULAI GRATIS
-                </a>
+                </Link>
               </div>
 
               {/* Hamburger Button */}
@@ -160,14 +160,13 @@ export default function Navbar() {
           </div>
 
           <div className="mt-auto flex flex-col gap-3 pb-6 border-t border-white/5 pt-4">
-            <a href="#features" onClick={() => setIsOpen(false)} className="w-full border border-white/10 text-white py-4 rounded-2xl font-bold hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
-              <Compass size={18} />
-              Pelajari Fitur
-            </a>
-            <a href="#register" onClick={() => setIsOpen(false)} className="w-full bg-[#FF6600] text-white py-4 rounded-2xl font-black shadow-lg shadow-orange-600/10 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
+            <Link href="/login" onClick={() => setIsOpen(false)} className="w-full border border-white/10 text-white py-4 rounded-2xl font-bold hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
+              Masuk
+            </Link>
+            <Link href="/register" onClick={() => setIsOpen(false)} className="w-full bg-[#FF6600] text-white py-4 rounded-2xl font-black shadow-lg shadow-orange-600/10 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
               <Rocket size={18} />
               Mulai Gratis
-            </a>
+            </Link>
           </div>
         </div>
       </div>
