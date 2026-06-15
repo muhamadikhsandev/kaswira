@@ -7,7 +7,7 @@ interface LogoProps {
 export default function Logo({ className = '' }: LogoProps) {
   return (
     <div className={`flex items-center group cursor-pointer relative ${className}`}>
-      <div className="relative w-18 h-18 md:w-20 md:h-20 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+      <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
         <Image 
           src="/logo-icon.png" 
           alt="Kaswira POS Logo" 
