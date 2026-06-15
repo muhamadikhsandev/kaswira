@@ -2,10 +2,13 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Lock, Mail, User, Store, ArrowRight, Loader2 } from 'lucide-react'
 import Logo from '@/components/landing/Logo'
+import { createClient } from '@/utils/supabase/client'
 
 export default function RegisterPage() {
+  const router = useRouter()
   const [name, setName] = useState('')
   const [businessName, setBusinessName] = useState('')
   const [email, setEmail] = useState('')
@@ -18,6 +21,10 @@ export default function RegisterPage() {
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Ambil instance browser client Supabase milikmu
+  const supabase = createClient()
+
+  // HANDLER REGISTRASI MANUAL (EMAIL & PASSWORD)
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -38,19 +45,48 @@ export default function RegisterPage() {
     }
 
     setIsLoading(true)
-    // Simulasi loading API
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    const { error: authError } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        // Menyimpan nama owner dan nama usaha ke dalam user_metadata di auth.users
+        data: {
+          full_name: name,
+          business_name: businessName,
+        },
+        // FIX: Mengubah 'redirectTo' menjadi 'emailRedirectTo' sesuai spesifikasi tipe data Supabase Auth SDK
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      }
+    })
+
+    if (authError) {
+      setError(authError.message || 'Gagal mendaftarkan akun baru')
+      setIsLoading(false)
+      return
+    }
+
     setIsLoading(false)
-    alert('Registrasi sukses! (Simulasi)')
+    alert('Registrasi sukses! Silakan periksa inbox email Anda untuk memverifikasi akun.')
+    router.push('/login')
   }
 
+  // HANDLER REGISTRASI GOOGLE (OAuth)
   const handleGoogleRegister = async () => {
     setError('')
     setGoogleLoading(true)
-    // Simulasi login Google
-    await new Promise((resolve) => setTimeout(resolve, 1200))
-    setGoogleLoading(false)
-    alert('Google Registrasi sukses! (Simulasi)')
+
+    const { error: oAuthError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    })
+
+    if (oAuthError) {
+      setError(oAuthError.message || 'Gagal registrasi dengan Google')
+      setGoogleLoading(false)
+    }
   }
 
   return (

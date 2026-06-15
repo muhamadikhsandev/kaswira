@@ -2,10 +2,13 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Lock, Mail, ArrowRight, Loader2 } from 'lucide-react'
 import Logo from '@/components/landing/Logo'
+import { createClient } from '@/utils/supabase/client' // Sesuaikan path ini ke file client.ts kamu
 
 export default function LoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -13,6 +16,10 @@ export default function LoginPage() {
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Ambil instance browser client Supabase milikmu
+  const supabase = createClient()
+
+  // HANDLER LOGIN MANUAL (EMAIL & PASSWORD)
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -23,19 +30,41 @@ export default function LoginPage() {
     }
 
     setIsLoading(true)
-    // Simulasi loading API
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-    alert('Login sukses! (Simulasi)')
+
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (authError) {
+      setError(authError.message || 'Gagal masuk, periksa kembali email dan password Anda')
+      setIsLoading(false)
+      return
+    }
+
+    // Login sukses, arahkan ke dashboard kaswira dan refresh state session
+    router.push('/dashboard')
+    router.refresh()
   }
 
+  // HANDLER LOGIN GOOGLE
   const handleGoogleLogin = async () => {
     setError('')
     setGoogleLoading(true)
-    // Simulasi login Google
-    await new Promise((resolve) => setTimeout(resolve, 1200))
-    setGoogleLoading(false)
-    alert('Google Login sukses! (Simulasi)')
+
+    const { error: oAuthError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        // Mengarahkan user kembali ke dashboard setelah login Google sukses
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    })
+
+    if (oAuthError) {
+      setError(oAuthError.message || 'Gagal login dengan Google')
+      setGoogleLoading(false)
+    }
+    // Catatan: Jika tidak error, browser otomatis dialihkan oleh Supabase ke halaman Google
   }
 
   return (
