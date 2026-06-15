@@ -59,8 +59,8 @@ export default function Navbar() {
             {/* 1. LOGO SECTION - Aligned with Hero container's left edge in both states */}
             <Logo className={`z-10 transition-all duration-300 ${
               isScrolled 
-                ? '-ml-1.5 md:-ml-3' 
-                : '-ml-0.5 md:-ml-1'
+                ? '-ml-3 md:-ml-5' 
+                : '-ml-1 md:-ml-2'
             }`} />
 
             {/* 2. DESKTOP MENU - Proportional sizing */}

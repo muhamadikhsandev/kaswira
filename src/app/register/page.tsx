@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, Lock, Mail, User, Store, ArrowRight, Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Lock, Mail, User, Store, ArrowRight, Loader2, ArrowLeft } from 'lucide-react'
 import Logo from '@/components/landing/Logo'
 import { createClient } from '@/utils/supabase/client'
 
@@ -156,6 +156,17 @@ export default function RegisterPage() {
         </div>
 
         <div className="w-full max-w-md mx-auto">
+          {/* Tombol Kembali ke Landing Page */}
+          <div className="flex justify-start mb-6">
+            <Link 
+              href="/" 
+              className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#FF6600] transition-colors group"
+            >
+              <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+              Kembali ke Beranda
+            </Link>
+          </div>
+
           {/* Header */}
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-black tracking-tight text-white">
