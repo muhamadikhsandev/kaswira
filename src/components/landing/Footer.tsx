@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-2">
-            <Logo className="mb-6 -ml-3 md:-ml-4" />
+            <Logo className="mb-6 -ml-2 md:-ml-3" />
             <p className="text-slate-400 max-w-sm leading-relaxed mb-6">
               Solusi Point of Sales terintegrasi untuk membantu pengusaha mengelola bisnis lebih cerdas, cepat, dan otomatis.
             </p>
