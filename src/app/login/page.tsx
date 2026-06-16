@@ -1,12 +1,19 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Lock, Mail, ArrowRight, Loader2, ArrowLeft } from 'lucide-react'
 import Logo from '@/components/landing/Logo'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
+import Script from 'next/script'
+
+declare global {
+  interface Window {
+    google?: any;
+  }
+}
 
 export default function LoginPage() {
   const router = useRouter()
@@ -48,21 +55,96 @@ export default function LoginPage() {
     router.refresh()
   }
 
+  // Load Google Client ID dari env
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+
+  // Callback handler untuk login Google client-side sukses
+  const handleCredentialResponse = async (response: any) => {
+    setGoogleLoading(true)
+    try {
+      const { error: idTokenError } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: response.credential,
+      })
+
+      if (idTokenError) {
+        toast.error(idTokenError.message || 'Gagal login dengan Google')
+        setGoogleLoading(false)
+        return
+      }
+
+      toast.success('Login Berhasil! Selamat datang di Kaswira POS.')
+      router.push('/dashboard')
+      router.refresh()
+    } catch (err: any) {
+      toast.error(err.message || 'Terjadi kesalahan saat login Google')
+      setGoogleLoading(false)
+    }
+  }
+
+  // Inisialisasi Google Identity Services
+  const initializeGsi = () => {
+    if (googleClientId && typeof window !== 'undefined' && window.google) {
+      try {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleCredentialResponse,
+        })
+
+        const container = document.getElementById('google-hidden-btn-container')
+        if (container) {
+          window.google.accounts.id.renderButton(container, {
+            type: 'standard',
+            theme: 'outline',
+            size: 'large',
+          })
+        }
+      } catch (err) {
+        console.error('Error initializing GSI:', err)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (googleClientId && typeof window !== 'undefined' && window.google) {
+      initializeGsi()
+    }
+  }, [googleClientId])
+
   // HANDLER LOGIN GOOGLE
   const handleGoogleLogin = async () => {
-    setGoogleLoading(true)
+    if (googleClientId) {
+      // Flow client-side ID Token (menghindari redirect ke supabase.co)
+      const container = document.getElementById('google-hidden-btn-container')
+      const googleBtn = container?.querySelector('div[role="button"]') as HTMLElement | null
+      if (googleBtn) {
+        googleBtn.click()
+      } else {
+        // Fallback jika tombol belum ter-render, coba inisialisasi ulang
+        initializeGsi()
+        setTimeout(() => {
+          const retryBtn = document.getElementById('google-hidden-btn-container')?.querySelector('div[role="button"]') as HTMLElement | null
+          if (retryBtn) {
+            retryBtn.click()
+          } else {
+            toast.error('Gagal memuat Google Sign-In. Silakan coba lagi.')
+          }
+        }, 300)
+      }
+    } else {
+      // Fallback: Flow OAuth redirect bawaan jika CLIENT_ID tidak diset
+      setGoogleLoading(true)
+      const { error: oAuthError } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      })
 
-    const { error: oAuthError } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        // Mengarahkan user kembali ke dashboard setelah login Google sukses
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    })
-
-    if (oAuthError) {
-      toast.error(oAuthError.message || 'Gagal login dengan Google')
-      setGoogleLoading(false)
+      if (oAuthError) {
+        toast.error(oAuthError.message || 'Gagal login dengan Google')
+        setGoogleLoading(false)
+      }
     }
   }
 
@@ -296,6 +378,16 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      {googleClientId && (
+        <>
+          <div id="google-hidden-btn-container" style={{ display: 'none' }} />
+          <Script
+            src="https://accounts.google.com/gsi/client"
+            strategy="afterInteractive"
+            onLoad={initializeGsi}
+          />
+        </>
+      )}
     </main>
   )
 }
