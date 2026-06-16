@@ -36,10 +36,10 @@ export default function Navbar() {
 
   const menuItems = [
     { name: 'Beranda', href: '#', icon: Home },
-    { name: 'Fitur', href: '#features', icon: LayoutDashboard },
-    { name: 'Harga', href: '#pricing', icon: Tag },
-    { name: 'Testimoni', href: '#testimoni', icon: MessageSquare },
-    { name: 'Bantuan', href: '#faq', icon: HelpCircle },
+    { name: 'Tentang Aplikasi', href: '#tentang-aplikasi', icon: Compass },
+    { name: 'Fitur', href: '#fitur', icon: LayoutDashboard },
+    { name: 'Harga', href: '#harga', icon: Tag },
+    { name: 'Bantuan', href: '#bantuan', icon: HelpCircle },
   ]
 
   return (
@@ -56,12 +56,8 @@ export default function Navbar() {
               : 'bg-transparent border-transparent px-0 shadow-none'
           }`}>
             
-            {/* 1. LOGO SECTION - Aligned with Hero container's left edge in both states */}
-            <Logo className={`z-10 transition-all duration-300 ${
-              isScrolled 
-                ? '-ml-1.5 md:-ml-3' 
-                : '-ml-0.5 md:-ml-1'
-            }`} />
+            {/* 1. LOGO SECTION - Aligned with Hero container's left edge */}
+            <Logo className="z-10 transition-all duration-300 -ml-0.5 md:-ml-1" />
 
             {/* 2. DESKTOP MENU - Proportional sizing */}
             <div className="hidden lg:flex items-center bg-white/5 border border-white/10 p-1 rounded-full backdrop-blur-lg">
