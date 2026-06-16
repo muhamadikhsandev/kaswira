@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Lock, Mail, ArrowRight, Loader2, ArrowLeft } from 'lucide-react'
 import Logo from '@/components/landing/Logo'
-import { createClient } from '@/utils/supabase/client' // Sesuaikan path ini ke file client.ts kamu
+import { createClient } from '@/utils/supabase/client'
+import { toast } from 'sonner'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -14,7 +15,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
-  const [error, setError] = useState('')
 
   // Ambil instance browser client Supabase milikmu
   const supabase = createClient()
@@ -22,10 +22,9 @@ export default function LoginPage() {
   // HANDLER LOGIN MANUAL (EMAIL & PASSWORD)
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
 
     if (!email || !password) {
-      setError('Harap isi semua kolom')
+      toast.error('Harap isi semua kolom email dan password')
       return
     }
 
@@ -37,11 +36,13 @@ export default function LoginPage() {
     })
 
     if (authError) {
-      setError(authError.message || 'Gagal masuk, periksa kembali email dan password Anda')
+      toast.error(authError.message || 'Gagal masuk, periksa kembali email dan password Anda')
       setIsLoading(false)
       return
     }
 
+    toast.success('Login Berhasil! Selamat datang di Kaswira POS.')
+    
     // Login sukses, arahkan ke dashboard kaswira dan refresh state session
     router.push('/dashboard')
     router.refresh()
@@ -49,7 +50,6 @@ export default function LoginPage() {
 
   // HANDLER LOGIN GOOGLE
   const handleGoogleLogin = async () => {
-    setError('')
     setGoogleLoading(true)
 
     const { error: oAuthError } = await supabase.auth.signInWithOAuth({
@@ -61,10 +61,9 @@ export default function LoginPage() {
     })
 
     if (oAuthError) {
-      setError(oAuthError.message || 'Gagal login dengan Google')
+      toast.error(oAuthError.message || 'Gagal login dengan Google')
       setGoogleLoading(false)
     }
-    // Catatan: Jika tidak error, browser otomatis dialihkan oleh Supabase ke halaman Google
   }
 
   return (
@@ -159,11 +158,6 @@ export default function LoginPage() {
           </div>
 
           <div className="bg-slate-900/40 backdrop-blur-xl py-8 px-6 shadow-2xl border border-white/10 rounded-2xl sm:px-10">
-            {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium">
-                {error}
-              </div>
-            )}
 
             <form className="space-y-6" onSubmit={handleLogin}>
               <div>
