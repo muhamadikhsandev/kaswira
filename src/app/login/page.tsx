@@ -198,7 +198,8 @@ export default function LoginPage() {
           <span>&copy; {new Date().getFullYear()} Kaswira. All rights reserved.</span>
           <div className="flex gap-4">
             <a href="#" className="hover:text-white transition-colors">Bantuan</a>
-            <a href="#" className="hover:text-white transition-colors">Kebijakan Privasi</a>
+            <Link href="/privacy" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
           </div>
         </div>
       </div>
