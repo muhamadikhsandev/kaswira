@@ -111,23 +111,20 @@ export default function Navbar() {
         onClick={() => setIsOpen(false)}
       />
 
-      <div className={`fixed bottom-0 left-0 right-0 z-[70] h-[85vh] w-full bg-slate-950/98 backdrop-blur-2xl border-t border-white/10 p-6 rounded-t-[2.5rem] transform transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
-        isOpen ? 'translate-y-0' : 'translate-y-full'
+      <div className={`fixed top-0 left-0 right-0 z-[70] w-full bg-slate-950/98 backdrop-blur-2xl border-b border-white/10 p-6 rounded-b-[2.5rem] transform transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
+        isOpen ? 'translate-y-0' : '-translate-y-full'
       }`}>
-        <div className="flex flex-col h-full">
-          {/* Top Grab/Drag Handle Indicator */}
-          <div 
-            className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6 cursor-pointer hover:bg-white/30 transition-colors" 
-            onClick={() => setIsOpen(false)}
-          />
-
+        <div className="flex flex-col">
+          {/* Header area with Logo and Close button */}
           <div className="flex items-center justify-between mb-6">
-            <span className="text-[10px] font-black text-slate-500 tracking-[0.25em] uppercase">Navigasi Utama</span>
+            <Link href="/" onClick={() => setIsOpen(false)}>
+              <Logo className="-ml-1" />
+            </Link>
             <button 
               onClick={() => setIsOpen(false)} 
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-slate-400"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-colors"
             >
-              <X size={16} />
+              <X size={20} />
             </button>
           </div>
 
@@ -155,7 +152,7 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="mt-auto flex flex-col gap-3 pb-6 border-t border-white/5 pt-4">
+          <div className="mt-6 flex flex-col gap-3 border-t border-white/5 pt-4">
             <Link href="/login" onClick={() => setIsOpen(false)} className="w-full border border-white/10 text-white py-4 rounded-2xl font-bold hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
               Masuk
             </Link>
